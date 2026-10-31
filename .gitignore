@@ -1,0 +1,4 @@
+/gh-syncyard
+/gh-syncyard-*
+dist/
+*.test
