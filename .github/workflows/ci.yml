@@ -1,0 +1,25 @@
+name: ci
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version: "1.22"
+      - run: go vet ./...
+      - run: go test ./...
+      # The parity tables must also compile for the platforms
+      # the release ships (the daemon socket is unix-only and
+      # has a fallback translation unit).
+      - run: GOOS=windows go build ./...
+      - run: GOOS=darwin go build ./...
