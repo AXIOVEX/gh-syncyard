@@ -52,6 +52,15 @@ Gatekeeper commands (forwarded verbatim to gk.py):
               snapshot and applies nothing
   probe-host  record a host capability snapshot for auto
               routing (spec 016 FR-005)
+  artifact-delete
+              delete one grab job's GitHub artifact (--job,
+              --landed-sha256); the artifact is deleted only
+              when its contents hash to exactly the given set,
+              as verified by the harvesting chat
+  staging-run run the staging-store harvest for completed jobs
+              with pending staging (--job for one job, --all
+              for every one; the sweep's own cadence stays one
+              job per pass)
 
 Rust engine commands (delegate to syncyard-cli, explicit --home):
   progress JOB        live progress view for a running job

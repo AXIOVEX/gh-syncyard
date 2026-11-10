@@ -1,4 +1,5 @@
 adopt
+artifact-delete
 cancel
 drain
 focus
@@ -14,6 +15,7 @@ purge
 reboot
 resume
 snapshot
+staging-run
 start
 status
 stop

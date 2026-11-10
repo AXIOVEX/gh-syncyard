@@ -52,6 +52,8 @@ func buildParity() parityData {
 		"dispatch":         "single-job dispatch lift (daemon-side transport)",
 		"control-outcomes": "spec 037: published outcomes for tray control commands",
 		"control-command":  "spec 037: deliver one signed tray command file to the local daemon",
+		"artifact-delete":  "delete a grab job's GitHub artifact only when its landed contents hash to the --landed-sha256 set",
+		"staging-run":      "staging-store harvest: claim, SFTP pull, hash verify, ledger, delete (--job one, --all every pending)",
 	}
 	for _, v := range sortedKeys(pythonVerbs) {
 		d.Verbs = append(d.Verbs, parityRow{v, "python", notes[v]})

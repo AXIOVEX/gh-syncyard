@@ -34,6 +34,8 @@ var pythonVerbs = map[string]bool{
 	"stop":        true,
 	"purge":       true,
 	"adopt":       true,
+	"artifact-delete": true, // delete a grab artifact after hash-verified landing
+	"staging-run":     true, // staging-store harvest pass (--job / --all)
 	"host-resume": true,
 	"reboot":      true,
 	"drain":       true,

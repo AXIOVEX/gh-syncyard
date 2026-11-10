@@ -1,5 +1,24 @@
 # Changelog
 
+## 0.4.1 — 2026-11-10
+
+Parity refresh: the Python gatekeeper gained two verbs after
+0.4.0, and the extension names and routes both, so the verb
+surface matches the live gk.py parser again (24 Python verbs).
+
+- artifact-delete: delete one grab job's GitHub artifact
+  (--job, --landed-sha256); the gatekeeper deletes only when
+  the artifact's contents hash to exactly the given set.
+- staging-run: run the staging-store harvest for completed
+  jobs with pending staging (--job for one, --all for every
+  pending; landed with the staging-store build, syncyard
+  PR #92).
+
+testdata/gk_verbs.txt re-extracted from the live gk.py parser;
+the drift tests prove the tables match. Help and the parity
+table carry both verbs with notes. Extension-only release:
+the Syncyard engine remains 0.4.0.
+
 ## 0.4.0 — 2026-11-08
 
 Spec 031 refresh: full verb parity with the engines as they
