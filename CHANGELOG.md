@@ -1,5 +1,58 @@
 # Changelog
 
+## 0.5.0 — 2026-11-10
+
+Audit 2026-11-10 robustness release (PR #1): the extension
+gains the spec 031 install/upgrade verbs and a set of
+robustness fixes found by the Syncyard audit. The verb
+surface grows from 37 to 39 canonical verbs. Extension-only
+release: the Syncyard engine remains 0.4.0.
+
+- install / upgrade (spec 031): download a named Syncyard
+  release bundle, verify every asset against the release
+  manifest's SHA-256 before anything is placed, place the
+  daemon/CLI/agent/tray binaries atomically and idempotently
+  (identical files keep their mtimes), never elevate silently,
+  write registration material with the agent ID pinned
+  explicitly (flag, then prior install record, then a stable
+  root-derived ID; never $HOSTNAME), print the registration
+  step as an explicit next action, and run doctor afterwards.
+  A manifest mismatch, an unknown version, or a platform with
+  no release assets refuses with the install root not created.
+- Discovery: the mini-server gatekeeper path is now the
+  governed nested layout /var/lib/syncyard/gatekeeper/gatekeeper/gk.py
+  (tried ahead of the legacy flat path, which is kept); setup
+  help, comments, help and README corrected to match.
+- Socket verbs: daemon replies must be a JSON object with an
+  explicit boolean ok (malformed, missing or non-bool replies
+  fail with exit 1); replies are bounded at 1 MiB and an
+  EOF-terminated partial line is an error, never a silent
+  success. Real-transport tests spin an actual unix socket
+  server; socketCallUnix coverage 0.0% to 85.7%.
+- Native verbs: version/help/schema/doctor take no arguments
+  and parity takes at most one --json; extra arguments are a
+  usage error (exit 2) instead of being silently ignored.
+- Doctor is functional: it executes gk.py --help, syncyard-cli
+  version/schema, and pings an existing daemon socket (live vs
+  stale); a component that cannot execute reports FAIL with a
+  nonzero exit.
+- SYNCYARD_HOME collision resolved: SYNCYARD_STATE_HOME is
+  preferred for the Rust state home, the gatekeeper directory
+  is the fallback, and SYNCYARD_HOME is never used as a state
+  home; Rust forwarding sets both env names to the resolved
+  state home for the call's duration.
+- Parity drift enforcement: new tools/genparity generator
+  re-extracts the parity tables from the gk.py parser and the
+  Rust CLI schema, with a --check mode wired into CI; README
+  documents the refresh command.
+- Docs and release: README gains artifact-delete, staging-run
+  and an Install section; submit's --image/--mounts are
+  documented and --mounts forwarding is tested; the release
+  workflow runs vet and tests and asserts the tag equals the
+  binary-reported version.
+- Tests: 24 to 50 test functions, root-package statement
+  coverage 75.8% to 81.7%.
+
 ## 0.4.1 — 2026-11-10
 
 Parity refresh: the Python gatekeeper gained two verbs after

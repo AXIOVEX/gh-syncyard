@@ -60,8 +60,10 @@ import (
 // the syncyard repo's VERSION, 0.4.0. (0.1.0 predated the train;
 // the jump is deliberate and recorded in CHANGELOG.md.) 0.4.1 is
 // an extension-only parity refresh on the same train; the
-// engine remains 0.4.0.
-const version = "0.4.1"
+// engine remains 0.4.0. 0.5.0 adds the spec 031 install/upgrade
+// verbs plus the 2026-11-10 audit robustness fixes; the engine
+// remains 0.4.0.
+const version = "0.5.0"
 
 func main() {
 	os.Exit(runMain(os.Args[1:], os.Stdout, os.Stderr))
