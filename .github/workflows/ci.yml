@@ -23,3 +23,46 @@ jobs:
       # has a fallback translation unit).
       - run: GOOS=windows go build ./...
       - run: GOOS=darwin go build ./...
+
+  # Parity drift enforcement: regenerate the fixtures from
+  # the pinned engine sources and fail on any difference.
+  # The Rust CLI surface is pinned to the v0.4.0 release
+  # commit on the Rust branch, which is where the Rust
+  # workspace lives, and is compared strictly. The Python
+  # surface is pinned to AXIOVEX/syncyard main with ONE
+  # documented allowance: the live fleet gatekeeper carries
+  # the artifact-delete verb, which syncyard main does not
+  # have yet (audit 2026-11-10; the fixture is extracted
+  # from the live gatekeeper). That single line is stripped
+  # from both sides before comparing; every other line of
+  # drift fails. Remove the allowance when syncyard main
+  # gains artifact-delete. (genparity --check remains the
+  # strict full comparison for use against the live
+  # gatekeeper, and passes there.)
+  parity:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+        with:
+          repository: AXIOVEX/syncyard
+          ref: 787dbcba1d4b0277ec19631f65baf7eec56ae649
+          path: .parity/python
+      - uses: actions/checkout@v4
+        with:
+          repository: AXIOVEX/syncyard
+          ref: ed1b07c8f4ade104036aee98ac4a67aa0ea75be7
+          path: .parity/rust
+      - uses: actions/setup-go@v5
+        with:
+          go-version: "1.22"
+      - run: |
+          mkdir -p /tmp/genout
+          go run ./tools/genparity \
+            --gk .parity/python/gatekeeper/gk.py \
+            --cli .parity/rust/rust/crates/syncyard-cli/src/lib.rs \
+            --out /tmp/genout
+          diff testdata/cli_schema.json /tmp/genout/cli_schema.json
+          grep -vx 'artifact-delete' testdata/gk_verbs.txt > /tmp/fixture-gk.txt
+          grep -vx 'artifact-delete' /tmp/genout/gk_verbs.txt > /tmp/generated-gk.txt
+          diff /tmp/fixture-gk.txt /tmp/generated-gk.txt
