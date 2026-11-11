@@ -61,7 +61,9 @@ func fakeCLI(t *testing.T, checkout string) string {
 }
 
 type childCall struct {
-	argv []string
+	argv     []string
+	envHome  string // SYNCYARD_HOME as the child process would inherit it
+	envState string // SYNCYARD_STATE_HOME as the child would inherit it
 }
 
 // captureChildren replaces the child-process transport with a
@@ -71,7 +73,11 @@ func captureChildren(t *testing.T, code int) *[]childCall {
 	calls := &[]childCall{}
 	old := runChild
 	runChild = func(argv []string, _ io.Reader, stdout, stderr io.Writer) int {
-		*calls = append(*calls, childCall{append([]string{}, argv...)})
+		*calls = append(*calls, childCall{
+			argv:     append([]string{}, argv...),
+			envHome:  os.Getenv("SYNCYARD_HOME"),
+			envState: os.Getenv("SYNCYARD_STATE_HOME"),
+		})
 		return code
 	}
 	t.Cleanup(func() { runChild = old })
@@ -304,6 +310,7 @@ func TestSubmitSpec016RoutingArgsForwardVerbatim(t *testing.T) {
 	args := []string{"submit", "--program", "p", "--workflow", "run.yml",
 		"--lane", "auto", "--needs-cpu", "4", "--needs-ram-mb", "8192",
 		"--needs-gpu", "12000", "--venue", "docker", "--image", "img",
+		"--mounts", "/host/a:/ctr/a,/host/b:/ctr/b",
 		"--key", "k", "--script", "s.ps1", "--cwd", "C:\\x"}
 	code, _, _ := run(t, args...)
 	if code != 0 || len(*calls) != 1 {
@@ -481,6 +488,7 @@ func TestDoctorResolvesFleet(t *testing.T) {
 	cleanEnv(t)
 	checkout, gk := fakeGK(t)
 	fakeCLI(t, checkout)
+	captureChildren(t, 0) // doctor's probes all succeed
 	code, out, _ := run(t, "doctor")
 	if code != 0 {
 		t.Fatalf("doctor: code=%d out=%q", code, out)
@@ -506,7 +514,7 @@ func TestParityAndSchemaCommands(t *testing.T) {
 	if err := json.Unmarshal([]byte(out), &d); err != nil {
 		t.Fatal(err)
 	}
-	wantRows := len(pythonVerbs) + len(rustCLIVerbs) + len(socketVerbs) + 5
+	wantRows := len(pythonVerbs) + len(rustCLIVerbs) + len(socketVerbs) + 7
 	if len(d.Verbs) != wantRows {
 		t.Fatalf("schema rows = %d, want %d", len(d.Verbs), wantRows)
 	}

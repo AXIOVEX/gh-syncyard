@@ -42,8 +42,12 @@ func gatekeeperCandidates() []candidate {
 		add(filepath.Join(home, "workspace", "desktop-access-migration", "gatekeeper", "gk.py"),
 			"~/workspace/desktop-access-migration/gatekeeper/gk.py (fleet VM gatekeeper)")
 	}
-	// This fleet: the mini-server system install.
-	add("/var/lib/syncyard/gatekeeper/gk.py", "/var/lib/syncyard/gatekeeper/gk.py (mini-server install)")
+	// This fleet: the mini-server system install. The governed
+	// copy lives in the nested gatekeeper/gatekeeper layout
+	// (the checkout root holds no gk.py); the flat legacy path
+	// is kept after it for transition.
+	add("/var/lib/syncyard/gatekeeper/gatekeeper/gk.py", "/var/lib/syncyard/gatekeeper/gatekeeper/gk.py (mini-server install)")
+	add("/var/lib/syncyard/gatekeeper/gk.py", "/var/lib/syncyard/gatekeeper/gk.py (mini-server install, legacy layout)")
 	if exe, err := os.Executable(); err == nil {
 		dir := filepath.Dir(exe)
 		add(filepath.Join(dir, "gatekeeper", "gk.py"), "beside the extension binary")
@@ -96,6 +100,9 @@ func resolveSyncyardCLI() (string, string) {
 	if p := os.Getenv("SYNCYARD_CLI"); p != "" {
 		add(p, "$SYNCYARD_CLI")
 	}
+	// The spec 031 install root (gh syncyard install places
+	// the CLI at <install root>/bin/syncyard-cli).
+	add(filepath.Join(installRoot(), "bin", exeName("syncyard-cli")), "install root (gh syncyard install)")
 	// Beside the resolved gatekeeper's checkout:
 	// <checkout>/rust/target/{release,debug}/syncyard-cli.
 	var roots []string
@@ -141,26 +148,41 @@ or point the extension at an existing checkout:
 
 Fleet locations already in the lookup: ~/syncyard, ~/.syncyard,
 ~/workspace/desktop-access-migration/gatekeeper (this fleet's VM
-gatekeeper) and /var/lib/syncyard/gatekeeper (mini-server).
+gatekeeper) and /var/lib/syncyard/gatekeeper/gatekeeper
+(mini-server's governed install).
 
 Then re-run:  gh syncyard doctor
 `)
 }
 
-// doctor reports exactly how each engine surface was resolved.
+// doctor is a functional check, not a path report: every
+// component it finds is executed (gk.py --help through the
+// resolved Python, syncyard-cli version and schema), and a
+// daemon socket is pinged, not just stat-ed. A component
+// that cannot execute reports FAIL and doctor exits nonzero;
+// a component that is absent reports NOT FOUND.
 func doctor(w io.Writer) int {
 	code := 0
 	fmt.Fprintf(w, "gh-syncyard %s (%s/%s)\n", version, runtime.GOOS, runtime.GOARCH)
 
 	gk, how := resolveGatekeeper()
+	py, pre := resolvePython()
 	if gk == "" {
 		fmt.Fprintln(w, "gatekeeper (gk.py): NOT FOUND")
 		printSetupHelp(w)
 		code = 2
+	} else if py == "" {
+		fmt.Fprintf(w, "gatekeeper (gk.py): %s (via %s); probe: FAIL (no Python interpreter)\n", gk, how)
 	} else {
-		fmt.Fprintf(w, "gatekeeper (gk.py): %s (via %s)\n", gk, how)
+		argv := append([]string{py}, pre...)
+		argv = append(argv, gk, "--help")
+		if exit := runChild(argv, nil, io.Discard, io.Discard); exit == 0 {
+			fmt.Fprintf(w, "gatekeeper (gk.py): %s (via %s); probe: OK (gk.py --help exit 0)\n", gk, how)
+		} else {
+			fmt.Fprintf(w, "gatekeeper (gk.py): %s (via %s); probe: FAIL (gk.py --help exit %d)\n", gk, how, exit)
+			code = 1
+		}
 	}
-	py, pre := resolvePython()
 	if py == "" {
 		fmt.Fprintln(w, "python: NOT FOUND on PATH (set $SYNCYARD_PYTHON)")
 		code = 2
@@ -172,16 +194,29 @@ func doctor(w io.Writer) int {
 	if cli == "" {
 		fmt.Fprintln(w, "syncyard-cli (Rust): NOT FOUND (Rust-only verbs unavailable; set $SYNCYARD_CLI or build the Rust workspace)")
 	} else {
-		fmt.Fprintf(w, "syncyard-cli (Rust): %s (via %s)\n", cli, cliHow)
+		vExit := runChild([]string{cli, "version"}, nil, io.Discard, io.Discard)
+		sExit := runChild([]string{cli, "schema"}, nil, io.Discard, io.Discard)
+		if vExit == 0 && sExit == 0 {
+			fmt.Fprintf(w, "syncyard-cli (Rust): %s (via %s); probe: OK (version/schema exit 0)\n", cli, cliHow)
+		} else {
+			fmt.Fprintf(w, "syncyard-cli (Rust): %s (via %s); probe: FAIL (version exit %d, schema exit %d)\n", cli, cliHow, vExit, sExit)
+			code = 1
+		}
 	}
 	home := rustStateHome()
 	if home == "" {
 		fmt.Fprintln(w, "rust state home: NOT RESOLVED (set $SYNCYARD_STATE_HOME)")
 	} else {
 		sock := filepath.Join(home, "gk.sock")
-		state := "no live socket (daemon not running)"
+		state := "no socket (daemon not running)"
 		if _, err := os.Stat(sock); err == nil {
-			state = "socket present"
+			reply, perr := socketCall(sock, []byte(`{"verb":"ping"}`))
+			if ok, valid := validateDaemonReply(reply); perr == nil && valid && ok {
+				state = "live (ping ok)"
+			} else {
+				state = "stale (ping failed: FAIL)"
+				code = 1
+			}
 		}
 		fmt.Fprintf(w, "rust state home: %s (daemon socket %s: %s)\n", home, sock, state)
 	}

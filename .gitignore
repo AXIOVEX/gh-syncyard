@@ -2,3 +2,4 @@
 /gh-syncyard-*
 dist/
 *.test
+.parity/

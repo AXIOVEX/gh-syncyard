@@ -30,8 +30,10 @@
 //  4. ~/.syncyard/gatekeeper/gk.py
 //  5. ~/workspace/desktop-access-migration/gatekeeper/gk.py
 //     (this fleet's VM-local gatekeeper, Desktop Access program)
-//  6. /var/lib/syncyard/gatekeeper/gk.py
-//     (mini-server system install)
+//  6. /var/lib/syncyard/gatekeeper/gatekeeper/gk.py
+//     (mini-server system install, governed nested layout;
+//     the flat /var/lib/syncyard/gatekeeper/gk.py legacy path
+//     is tried right after it)
 //  7. gatekeeper/gk.py beside, or one level up from, this binary
 //  8. ./gatekeeper/gk.py relative to the working directory
 //

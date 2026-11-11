@@ -18,30 +18,30 @@ package main
 
 // pythonVerbs are forwarded verbatim to gatekeeper/gk.py.
 var pythonVerbs = map[string]bool{
-	"submit":      true, // incl. spec 016 auto routing (see help)
-	"status":      true,
-	"sweep":       true,
-	"outbox":      true,
-	"cancel":      true,
-	"pause":       true,
-	"focus":       true,
-	"resume":      true, // also: withdraw one job's hold (--job)
-	"priority":    true,
-	"hold":        true,
-	"lock":        true,
-	"unlock":      true,
-	"start":       true,
-	"stop":        true,
-	"purge":       true,
-	"adopt":       true,
+	"submit":          true, // incl. spec 016 auto routing (see help)
+	"status":          true,
+	"sweep":           true,
+	"outbox":          true,
+	"cancel":          true,
+	"pause":           true,
+	"focus":           true,
+	"resume":          true, // also: withdraw one job's hold (--job)
+	"priority":        true,
+	"hold":            true,
+	"lock":            true,
+	"unlock":          true,
+	"start":           true,
+	"stop":            true,
+	"purge":           true,
+	"adopt":           true,
 	"artifact-delete": true, // delete a grab artifact after hash-verified landing
 	"staging-run":     true, // staging-store harvest pass (--job / --all)
-	"host-resume": true,
-	"reboot":      true,
-	"drain":       true,
-	"snapshot":    true,
-	"profile":     true, // spec 016 lane profiles (+ suggest)
-	"probe-host":  true,
+	"host-resume":     true,
+	"reboot":          true,
+	"drain":           true,
+	"snapshot":        true,
+	"profile":         true, // spec 016 lane profiles (+ suggest)
+	"probe-host":      true,
 }
 
 // rustCLIVerbs exist only in the Rust engine; they delegate to
@@ -73,6 +73,8 @@ var nativeVerbs = map[string]bool{
 	"doctor":    true,
 	"parity":    true,
 	"schema":    true,
+	"install":   true, // spec 031 amendment: verified release-bundle install
+	"upgrade":   true, // spec 031 amendment: named-version upgrade
 }
 
 // cliSharedVerbs are implemented by BOTH the Python gatekeeper

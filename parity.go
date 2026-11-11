@@ -42,7 +42,7 @@ func buildParity() parityData {
 		ContractVersion:  1,
 	}
 	notes := map[string]string{
-		"submit":           "spec 016 auto routing: --lane auto + --needs-cpu/--needs-ram-mb/--needs-storage-mb/--needs-gpu/--venue hints forward verbatim",
+		"submit":           "spec 016 auto routing: --lane auto + --needs-cpu/--needs-ram-mb/--needs-storage-mb/--needs-gpu/--venue hints forward verbatim; docker transport: --image, --mounts",
 		"resume":           "also withdraws one job's checkpoint hold with --job (spec 013 FR-009)",
 		"profile":          "spec 016 lane profiles; `profile suggest` drafts from a capability snapshot",
 		"probe-host":       "spec 016 FR-005 capability snapshot for auto routing",
@@ -64,8 +64,12 @@ func buildParity() parityData {
 	for _, v := range sortedKeys(socketVerbs) {
 		d.Verbs = append(d.Verbs, parityRow{v, "rust-socket", notes[v]})
 	}
-	for _, v := range []string{"version", "help", "doctor", "parity", "schema"} {
-		d.Verbs = append(d.Verbs, parityRow{v, "extension", ""})
+	nativeNotes := map[string]string{
+		"install": "spec 031 amendment: fetch the release bundle, verify it against the release SHA-256 manifest before placing anything, place daemon/cli/agent/tray, print service registration as an explicit next action",
+		"upgrade": "spec 031 amendment: install to a named target version (--version required)",
+	}
+	for _, v := range []string{"version", "help", "doctor", "parity", "schema", "install", "upgrade"} {
+		d.Verbs = append(d.Verbs, parityRow{v, "extension", nativeNotes[v]})
 	}
 	sort.Slice(d.Verbs, func(i, j int) bool { return d.Verbs[i].Verb < d.Verbs[j].Verb })
 
@@ -87,8 +91,13 @@ func mapBool(m map[string]string) map[string]bool {
 }
 
 // parityCmd prints the parity table (or JSON with --json).
+// The only accepted argument is a single --json; anything
+// else is a usage error, never silently ignored.
 func parityCmd(rest []string, stdout, stderr io.Writer) int {
 	d := buildParity()
+	if len(rest) > 1 || (len(rest) == 1 && rest[0] != "--json") {
+		return usageError(stderr, "gh syncyard parity [--json]")
+	}
 	for _, a := range rest {
 		if a == "--json" {
 			b, err := json.MarshalIndent(d, "", "  ")

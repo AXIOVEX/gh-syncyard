@@ -21,6 +21,11 @@ Gatekeeper commands (forwarded verbatim to gk.py):
               and --venue are forwarded untouched; the sweep
               picks the lane from hints, history and host
               capability snapshots (see probe-host, profile).
+              Docker-transport jobs take --image (container
+              image; defaults to the lane host's configured
+              image) and --mounts (comma-separated
+              host:container mount pairs); both forward
+              untouched.
   status      queue, lane and run state (--repo adds CI health)
   snapshot    spec 014 fleet snapshot as one JSON object
   sweep       one dispatch + watch pass
@@ -87,10 +92,25 @@ Daemon control commands (daemon socket, spec 037):
 
 Extension-native commands:
   gh syncyard version   print the extension version
-  gh syncyard doctor    show how each engine was located
+  gh syncyard doctor    functionally check each engine (executes
+                        gk.py --help and syncyard-cli
+                        version/schema; pings the daemon socket
+                        when one exists; FAIL means nonzero)
   gh syncyard parity    the verb parity table (--json for JSON)
   gh syncyard schema    the parity surface as JSON
   gh syncyard help      this text
+  gh syncyard install [--version X] [--agent-id ID]
+                        fetch the Syncyard release bundle for
+                        this host, verify it against the
+                        release SHA-256 manifest before placing
+                        anything, and place the daemon, CLI,
+                        agent and tray (spec 031 amendment).
+                        Defaults to this extension's version.
+                        Never elevates silently: service
+                        registration is printed as an explicit
+                        next action, with the agent id pinned
+  gh syncyard upgrade --version X [--agent-id ID]
+                        the same, to a named target version
 
 Known gaps (named, not silent):
   - sweep, priority, lock, unlock, focus, drain, probe-host,
@@ -112,11 +132,32 @@ Known gaps (named, not silent):
 Gatekeeper lookup: $SYNCYARD_GK, then
 $SYNCYARD_HOME/gatekeeper/gk.py, then ~/syncyard, ~/.syncyard,
 ~/workspace/desktop-access-migration/gatekeeper/gk.py (this
-fleet's VM gatekeeper), /var/lib/syncyard/gatekeeper/gk.py
-(mini-server), beside this binary, or ./gatekeeper.
+fleet's VM gatekeeper),
+/var/lib/syncyard/gatekeeper/gatekeeper/gk.py (mini-server's
+governed install; the flat legacy path is tried after it),
+beside this binary, or ./gatekeeper.
 Python: $SYNCYARD_PYTHON, else python3 / python / py on PATH.
 syncyard-cli: $SYNCYARD_CLI, then rust/target/{release,debug}
-under the Syncyard checkout, beside this binary, or PATH.
-Rust state home: $SYNCYARD_STATE_HOME, else the gatekeeper's
-directory (always passed explicitly; there is no default).
+under the Syncyard checkout, the install root (see below),
+beside this binary, or PATH.
+
+Environment variables (the two homes are different things):
+  SYNCYARD_HOME       a Syncyard CHECKOUT root, read by this
+                      extension only (gatekeeper and CLI
+                      lookup). The Rust tools read the same
+                      name as their state home, so the
+                      extension never uses it as a state home.
+  SYNCYARD_STATE_HOME the Rust engine's state home. Preferred
+                      over every other source; else the
+                      gatekeeper's directory is used. When the
+                      extension delegates to syncyard-cli it
+                      passes the state home explicitly, both as
+                      --home and in the child's environment
+                      (as SYNCYARD_STATE_HOME and, for the
+                      Rust tools' own convention,
+                      SYNCYARD_HOME), so the checkout meaning
+                      above cannot leak into the child.
+  SYNCYARD_INSTALL_ROOT
+                      where install/upgrade place the stack
+                      (default: ~/.local/share/syncyard).
 `
