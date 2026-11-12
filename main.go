@@ -1,18 +1,18 @@
 // Command gh-syncyard is the Syncyard extension for the GitHub CLI.
 //
 // It is a front door over the Syncyard gatekeeper engines. Two
-// engines exist during the Rust migration (spec 038's one-move
+// engines exist during the Rust migration (the one-move
 // cutover has not happened yet):
 //
 //   - the Python gatekeeper (gatekeeper/gk.py, electrohire/syncyard)
 //     is the live engine. Every verb it implements is forwarded to
 //     it verbatim, streaming stdin, stdout, stderr and the exit
 //     code unchanged — the 0.1.0 pattern, kept.
-//   - the Rust engine (syncyard-cli + syncyard-daemon, spec 038)
-//     owns the verbs that exist only there: progress (spec 034),
-//     kill-switch (spec 037 FIX-08), ledger, dispatch,
+//   - the Rust engine (syncyard-cli + syncyard-daemon)
+//     owns the verbs that exist only there: progress,
+//     kill-switch, ledger, dispatch,
 //     migrate-history, flush, and the daemon-socket control
-//     surface (control_command / control_outcomes, spec 037).
+//     surface (control_command / control_outcomes).
 //     Those delegate to the syncyard-cli binary or, for the
 //     control surface, speak the daemon's newline-JSON Unix
 //     socket protocol directly — the same channel the tray uses.
@@ -54,11 +54,11 @@ import (
 )
 
 // version is the extension version. One version train with the
-// Syncyard engine (spec 038 UPD-01): the 0.4.0 release carried
+// Syncyard engine: the 0.4.0 release carried
 // the syncyard repo's VERSION, 0.4.0. (0.1.0 predated the train;
 // the jump is deliberate and recorded in CHANGELOG.md.) 0.4.1 is
 // an extension-only parity refresh on the same train; the
-// engine remains 0.4.0. 0.5.0 adds the spec 031 install/upgrade
+// engine remains 0.4.0. 0.5.0 adds the install/upgrade
 // verbs plus the 2026-11-10 audit robustness fixes; the engine
 // remains 0.4.0.
 const version = "0.5.0"

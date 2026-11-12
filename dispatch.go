@@ -179,7 +179,7 @@ func restoreEnv(name, value string, had bool) {
 }
 
 // runSocketVerb speaks the daemon's newline-JSON socket protocol
-// for the spec 037 control surface.
+// for the control surface.
 func runSocketVerb(verb string, rest []string, stdout, stderr io.Writer) int {
 	home := rustStateHome()
 	if home == "" {
@@ -250,7 +250,7 @@ func validateDaemonReply(reply string) (ok bool, valid bool) {
 // controlCommandPayload builds the control_command request from
 // the signed command file the tray wrote: `control-command
 // <file>` or `control-command --file <file>`. The file's JSON is
-// embedded verbatim; verification happens daemon-side (spec 037).
+// embedded verbatim; verification happens daemon-side.
 func controlCommandPayload(rest []string) ([]byte, error) {
 	var path string
 	for i := 0; i < len(rest); i++ {

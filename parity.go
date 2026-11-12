@@ -42,16 +42,16 @@ func buildParity() parityData {
 		ContractVersion:  1,
 	}
 	notes := map[string]string{
-		"submit":           "spec 016 auto routing: --lane auto + --needs-cpu/--needs-ram-mb/--needs-storage-mb/--needs-gpu/--venue hints forward verbatim; docker transport: --image, --mounts",
-		"resume":           "also withdraws one job's checkpoint hold with --job (spec 013 FR-009)",
-		"profile":          "spec 016 lane profiles; `profile suggest` drafts from a capability snapshot",
-		"probe-host":       "spec 016 FR-005 capability snapshot for auto routing",
-		"progress":         "spec 034 live progress view (daemon RAM; degrades honestly in fallback)",
-		"kill-switch":      "spec 037 FIX-08 repair kill switch (daemon kill_switch verb)",
-		"migrate-history":  "spec 038: import a Python gatekeeper dir with SHA-256 manifest",
+		"submit":           "auto routing: --lane auto + --needs-cpu/--needs-ram-mb/--needs-storage-mb/--needs-gpu/--venue hints forward verbatim; docker transport: --image, --mounts",
+		"resume":           "also withdraws one job's checkpoint hold with --job",
+		"profile":          "lane profiles; `profile suggest` drafts from a capability snapshot",
+		"probe-host":       "capability snapshot for auto routing",
+		"progress":         "live progress view (daemon RAM; degrades honestly in fallback)",
+		"kill-switch":      "FIX-08 repair kill switch (daemon kill_switch verb)",
+		"migrate-history":  "import a Python gatekeeper dir with SHA-256 manifest",
 		"dispatch":         "single-job dispatch lift (daemon-side transport)",
-		"control-outcomes": "spec 037: published outcomes for tray control commands",
-		"control-command":  "spec 037: deliver one signed tray command file to the local daemon",
+		"control-outcomes": "published outcomes for tray control commands",
+		"control-command":  "deliver one signed tray command file to the local daemon",
 		"artifact-delete":  "delete a grab job's GitHub artifact only when its landed contents hash to the --landed-sha256 set",
 		"staging-run":      "staging-store harvest: claim, SFTP pull, hash verify, ledger, delete (--job one, --all every pending)",
 	}
@@ -65,8 +65,8 @@ func buildParity() parityData {
 		d.Verbs = append(d.Verbs, parityRow{v, "rust-socket", notes[v]})
 	}
 	nativeNotes := map[string]string{
-		"install": "spec 031 amendment: fetch the release bundle, verify it against the release SHA-256 manifest before placing anything, place daemon/cli/agent/tray, print service registration as an explicit next action",
-		"upgrade": "spec 031 amendment: install to a named target version (--version required)",
+		"install": "fetch the release bundle, verify it against the release SHA-256 manifest before placing anything, place daemon/cli/agent/tray, print service registration as an explicit next action",
+		"upgrade": "install to a named target version (--version required)",
 	}
 	for _, v := range []string{"version", "help", "doctor", "parity", "schema", "install", "upgrade"} {
 		d.Verbs = append(d.Verbs, parityRow{v, "extension", nativeNotes[v]})

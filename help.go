@@ -15,7 +15,7 @@ Usage:
 
 Gatekeeper commands (forwarded verbatim to gk.py):
   submit      queue a job script for dispatch to a runner lane.
-              Spec 016 auto routing: --lane auto (or omitted
+              Auto routing: --lane auto (or omitted
               where enabled) plus resource hints --needs-cpu,
               --needs-ram-mb, --needs-storage-mb, --needs-gpu
               and --venue are forwarded untouched; the sweep
@@ -27,36 +27,35 @@ Gatekeeper commands (forwarded verbatim to gk.py):
               host:container mount pairs); both forward
               untouched.
   status      queue, lane and run state (--repo adds CI health)
-  snapshot    spec 014 fleet snapshot as one JSON object
+  snapshot    fleet snapshot as one JSON object
   sweep       one dispatch + watch pass
   outbox      push notifications owed to registered chats (--ack
               advances the cursor after delivery)
   cancel      cancel a queued (not yet dispatched) job
   pause       stop dispatching (watching/harvesting continues);
               --drain lets executing jobs finish first
-  focus       pause all but the selected jobs (spec 013 FR-001)
+  focus       pause all but the selected jobs
   resume      resume dispatching; with --job, withdraw one job's
-              checkpoint hold (spec 013 FR-009)
+              checkpoint hold
   hold        request a cooperative checkpoint hold on a job
-  priority    change a waiting job's priority (spec 013 FR-004)
-  lock        acquire/renew/suspend/resume a lane priority lock
-              (spec 015); --list shows the locks
-  unlock      release a lane priority lock (spec 015 FR-003)
+  priority    change a waiting job's priority
+  lock        acquire/renew/suspend/resume a lane priority lock; --list shows the locks
+  unlock      release a lane priority lock
   start       clear the pipeline stop
   stop        stop the pipeline (--reason recorded)
   drain       drain one host: hold its dispatch, signal running
               jobs to checkpoint, print the CLEAN / INTERRUPTING
-              verdict (spec 011 FR-007)
+              verdict
   host-resume clear a host's going-down and drain holds
-  reboot      request a controlled reboot of a host (spec 011)
+  reboot      request a controlled reboot of a host
   adopt       adopt an externally started run into the queue
   purge       archive/delete terminal records (dry run unless
               --yes)
-  profile     render the spec 016 lane profiles; 'profile
+  profile     render the lane profiles; 'profile
               suggest' drafts a profile from a host capability
               snapshot and applies nothing
   probe-host  record a host capability snapshot for auto
-              routing (spec 016 FR-005)
+              routing
   artifact-delete
               delete one grab job's GitHub artifact (--job,
               --landed-sha256); the artifact is deleted only
@@ -69,19 +68,19 @@ Gatekeeper commands (forwarded verbatim to gk.py):
 
 Rust engine commands (delegate to syncyard-cli, explicit --home):
   progress JOB        live progress view for a running job
-                      (spec 034; fraction, markers, staleness)
+                      (fraction, markers, staleness)
   kill-switch [on|off]
-                      the FIX-08 repair kill switch (spec 037):
+                      the FIX-08 repair kill switch:
                       read it, or set/clear it as a ledgered
                       operator act
   ledger [--tail N]   recent ledger entries
   dispatch JOB        lift one queued job now (daemon transport)
   migrate-history --from DIR
                       import a Python gatekeeper directory with
-                      its SHA-256 manifest (spec 038)
+                      its SHA-256 manifest
   flush               flush daemon RAM state to disk now
 
-Daemon control commands (daemon socket, spec 037):
+Daemon control commands (daemon socket):
   control-outcomes    the gatekeeper's published outcomes for
                       tray control commands (the only surface an
                       app may treat as confirmation)
@@ -104,7 +103,7 @@ Extension-native commands:
                         this host, verify it against the
                         release SHA-256 manifest before placing
                         anything, and place the daemon, CLI,
-                        agent and tray (spec 031 amendment).
+                        agent and tray.
                         Defaults to this extension's version.
                         Never elevates silently: service
                         registration is printed as an explicit
@@ -117,14 +116,13 @@ Known gaps (named, not silent):
     adopt and purge are served by the Python gatekeeper; the
     Rust CLI does not implement them yet (its schema verb lists
     them as not_yet_verbs). They land with the GitHub transport
-    phase, and routing flips at the spec 038 one-move cutover.
+    phase, and routing flips at the one-move cutover.
   - The daemon's agent_poll / agent_completion socket verbs are
     the syncyard-agent venue channel, not operator verbs; they
     are deliberately not exposed here.
   - control-command delivers to a daemon on THIS host. The
     backchannel leg that carries signed command files from a
-    tray host to the gatekeeper host is field wiring (spec 037
-    gap carried from P4), not part of this extension.
+    tray host to the gatekeeper host is field wiring, not part of this extension.
   - The daemon socket channel is unix-only in this build (the
     tray carries the same limitation); on Windows the control
     surface goes through the tray app.
