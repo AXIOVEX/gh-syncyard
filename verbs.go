@@ -12,13 +12,13 @@ package main
 //     schema not_yet_verb must appear in pythonVerbs (it is
 //     served by the Python engine until its Rust phase lands).
 //
-// One-move cutover (spec 038): when the Rust engine becomes the
+// One-move cutover: when the Rust engine becomes the
 // live engine, the shared verbs move from pythonVerbs routing to
 // the CLI; until then the routing below is the honest state.
 
 // pythonVerbs are forwarded verbatim to gatekeeper/gk.py.
 var pythonVerbs = map[string]bool{
-	"submit":          true, // incl. spec 016 auto routing (see help)
+	"submit":          true, // incl. auto routing (see help)
 	"status":          true,
 	"sweep":           true,
 	"outbox":          true,
@@ -40,15 +40,15 @@ var pythonVerbs = map[string]bool{
 	"reboot":          true,
 	"drain":           true,
 	"snapshot":        true,
-	"profile":         true, // spec 016 lane profiles (+ suggest)
+	"profile":         true, // lane profiles (+ suggest)
 	"probe-host":      true,
 }
 
 // rustCLIVerbs exist only in the Rust engine; they delegate to
 // syncyard-cli with an explicit --home.
 var rustCLIVerbs = map[string]bool{
-	"progress":        true, // spec 034 live progress view
-	"kill-switch":     true, // spec 037 FIX-08 (daemon kill_switch)
+	"progress":        true, // live progress view
+	"kill-switch":     true, // FIX-08 (daemon kill_switch)
 	"ledger":          true,
 	"dispatch":        true,
 	"migrate-history": true,
@@ -56,7 +56,7 @@ var rustCLIVerbs = map[string]bool{
 }
 
 // socketVerbs speak the daemon's newline-JSON socket protocol
-// directly (the tray's GatekeeperChannel surface, spec 037).
+// directly (the tray's GatekeeperChannel surface).
 var socketVerbs = map[string]bool{
 	"control-outcomes": true, // daemon control_outcomes
 	"control-command":  true, // daemon control_command
@@ -73,13 +73,13 @@ var nativeVerbs = map[string]bool{
 	"doctor":    true,
 	"parity":    true,
 	"schema":    true,
-	"install":   true, // spec 031 amendment: verified release-bundle install
-	"upgrade":   true, // spec 031 amendment: named-version upgrade
+	"install":   true, // verified release-bundle install
+	"upgrade":   true, // named-version upgrade
 }
 
 // cliSharedVerbs are implemented by BOTH the Python gatekeeper
 // and the Rust CLI (per its schema verb); they route to Python
-// until the spec 038 cutover. Kept as data so the parity test
+// until the cutover. Kept as data so the parity test
 // can assert the schema's shared verbs are all routed somewhere.
 var cliSharedVerbs = map[string]bool{
 	"submit":   true,

@@ -16,7 +16,7 @@ import (
 	"time"
 )
 
-// Spec 031 amendment: `gh syncyard install` /
+// The install verbs: `gh syncyard install` /
 // `gh syncyard upgrade`.
 //
 // The verb fetches the versioned Syncyard release bundle

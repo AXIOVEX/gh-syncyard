@@ -16,15 +16,15 @@ watchdogged door between "an agent wants this run" and your hardware.
 ## What this extension is
 
 The **front door** over the Syncyard gatekeeper engines. Two
-engines exist during the Rust migration (spec 038's one-move
+engines exist during the Rust migration (the one-move
 cutover has not happened yet), and the extension routes per verb:
 
 - The **Python gatekeeper** (`gatekeeper/gk.py`) is the live
   engine. Every verb it implements is forwarded verbatim —
   output and exit codes stream through unchanged.
 - The **Rust engine** (`syncyard-cli` + `syncyard-daemon`) owns
-  the newest verbs: live progress (spec 034), the FIX-08 kill
-  switch and the tray control surface (spec 037), ledger,
+  the newest verbs: live progress, the FIX-08 kill
+  switch and the tray control surface, ledger,
   dispatch, migrate-history and flush. Those delegate to the
   `syncyard-cli` binary (always with an explicit `--home`), or
   speak the daemon's newline-JSON Unix socket directly for the
@@ -86,7 +86,7 @@ $ gh syncyard install --version 0.4.0 --agent-id my-host
 $ gh syncyard upgrade --version 0.5.0
 ```
 
-`install` / `upgrade` (spec 031 amendment) fetch the named
+`install` / `upgrade` fetch the named
 Syncyard release bundle for this host's OS/arch from
 [electrohire/syncyard releases](https://github.com/electrohire/syncyard/releases),
 verify every component against the release SHA-256 manifest
@@ -107,7 +107,7 @@ and finishes by running `doctor` and reporting its verdict.
 
 ## Commands
 
-**Gatekeeper (gk.py):** `submit` (with spec 016 auto routing:
+**Gatekeeper (gk.py):** `submit` (with auto routing:
 `--lane auto` plus `--needs-cpu` / `--needs-ram-mb` /
 `--needs-storage-mb` / `--needs-gpu` / `--venue` hints, and
 the docker-transport `--image` / `--mounts` arguments),
@@ -162,6 +162,5 @@ and the unix-only daemon socket in this build.
 
 ## License
 
-Apache-2.0. Design: spec 010 FR-012 and spec 031 (extension
-refresh) in
+Apache-2.0. The design lives in
 [electrohire/syncyard](https://github.com/electrohire/syncyard).

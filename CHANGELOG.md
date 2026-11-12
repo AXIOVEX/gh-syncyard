@@ -3,12 +3,12 @@
 ## 0.5.0 — 2026-11-10
 
 Audit 2026-11-10 robustness release (PR #1): the extension
-gains the spec 031 install/upgrade verbs and a set of
+gains the install/upgrade verbs and a set of
 robustness fixes found by the Syncyard audit. The verb
 surface grows from 37 to 39 canonical verbs. Extension-only
 release: the Syncyard engine remains 0.4.0.
 
-- install / upgrade (spec 031): download a named Syncyard
+- install / upgrade: download a named Syncyard
   release bundle, verify every asset against the release
   manifest's SHA-256 before anything is placed, place the
   daemon/CLI/agent/tray binaries atomically and idempotently
@@ -74,22 +74,22 @@ the Syncyard engine remains 0.4.0.
 
 ## 0.4.0 — 2026-11-08
 
-Spec 031 refresh: full verb parity with the engines as they
-stand, proven by drift tests rather than by eye. The version
-joins the Syncyard one-version train (engine VERSION 0.4.0,
-spec 038 UPD-01); 0.2.x/0.3.x were never released.
+Full verb parity with the engines as they stand, proven by
+drift tests rather than by eye. The version joins the Syncyard
+one-version train (engine VERSION 0.4.0); 0.2.x/0.3.x were
+never released.
 
 - All 22 Python gatekeeper verbs are now named and routed
   (previously help listed 7 and everything else forwarded
-  blind): submit (with spec 016 auto routing arguments),
+  blind): submit (with auto routing arguments),
   status, snapshot, sweep, outbox, cancel, pause, focus,
   resume (including hold withdrawal via --job), hold, priority,
   lock, unlock, start, stop, drain, host-resume, reboot, adopt,
   purge, profile, probe-host.
 - Rust engine verbs delegate to syncyard-cli with an explicit
-  --home: progress (spec 034), kill-switch (spec 037 FIX-08),
+  --home: progress, kill-switch,
   ledger, dispatch, migrate-history, flush.
-- Spec 037 control surface over the daemon's newline-JSON Unix
+- Control surface over the daemon's newline-JSON Unix
   socket: control-outcomes, control-command (delivers one
   signed tray command file; verification is daemon-side).
 - New native verbs: parity (the routing table, --json) and
@@ -119,8 +119,8 @@ spec 038 UPD-01); 0.2.x/0.3.x were never released.
 ## 0.1.0 — 2026-10-31
 
 - First release: thin Go dispatcher forwarding `gh syncyard ...` to
-  the locally installed Syncyard gatekeeper (electrohire/syncyard,
-  spec 010 FR-012). Gatekeeper lookup via $SYNCYARD_GK /
+  the locally installed Syncyard gatekeeper (electrohire/syncyard).
+  Gatekeeper lookup via $SYNCYARD_GK /
   $SYNCYARD_HOME / ~/syncyard / ~/.syncyard / beside the binary /
   ./gatekeeper; Python via $SYNCYARD_PYTHON or PATH.
 - Extension-native `version`, `doctor`, and `help` commands.

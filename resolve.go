@@ -23,8 +23,8 @@ type candidate struct {
 }
 
 // gatekeeperCandidates is the install-path lookup, in order. It
-// covers this fleet's real locations (spec 031: the lookup must
-// know the fleet, and fail honestly when none is found).
+// covers the standard install locations and fails honestly when
+// none is found.
 func gatekeeperCandidates() []candidate {
 	var out []candidate
 	add := func(path, how string) { out = append(out, candidate{path, how}) }
@@ -97,7 +97,7 @@ func resolveSyncyardCLI() (string, string) {
 	if p := os.Getenv("SYNCYARD_CLI"); p != "" {
 		add(p, "$SYNCYARD_CLI")
 	}
-	// The spec 031 install root (gh syncyard install places
+	// The install root (gh syncyard install places
 	// the CLI at <install root>/bin/syncyard-cli).
 	add(filepath.Join(installRoot(), "bin", exeName("syncyard-cli")), "install root (gh syncyard install)")
 	// Beside the resolved gatekeeper's checkout:
