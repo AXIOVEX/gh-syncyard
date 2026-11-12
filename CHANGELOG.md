@@ -1,5 +1,22 @@
 # Changelog
 
+## 0.6.0 — 2026-11-12
+
+First release under ElectroHire, Inc. The extension moved to
+electrohire/gh-syncyard and everything public now names
+ElectroHire: the Go module path, the release download base,
+the CI checkout, the docs and the LICENSE attribution.
+
+- Gatekeeper discovery is fleet-free: the old hardcoded
+  gatekeeper path is gone; discovery is SYNCYARD_GK,
+  SYNCYARD_HOME, ~/syncyard, ~/.syncyard, the system install
+  under /var/lib/syncyard, beside the binary, or the working
+  directory.
+- Public docs and user-facing text (README, this changelog,
+  the built-in help and the parity table) no longer cite
+  internal design references.
+- Extension-only release: the Syncyard engine remains 0.4.0.
+
 ## 0.5.0 — 2026-11-10
 
 Audit 2026-11-10 robustness release (PR #1): the extension
