@@ -60,8 +60,11 @@ import (
 // an extension-only parity refresh on the same train; the
 // engine remains 0.4.0. 0.5.0 adds the install/upgrade
 // verbs plus the 2026-11-10 audit robustness fixes; the engine
-// remains 0.4.0.
-const version = "0.5.0"
+// remains 0.4.0. 0.6.0 is the first release under
+// ElectroHire, Inc.: the rebrand, the fleet-free gatekeeper
+// discovery, and public docs and help text with the internal
+// design references removed; the engine remains 0.4.0.
+const version = "0.6.0"
 
 func main() {
 	os.Exit(runMain(os.Args[1:], os.Stdout, os.Stderr))
