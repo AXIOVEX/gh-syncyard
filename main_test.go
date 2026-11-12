@@ -143,7 +143,7 @@ func TestHelpCoversEveryVerbAndGap(t *testing.T) {
 			t.Errorf("help omits named gap %q", v)
 		}
 	}
-	for _, want := range []string{"--needs-gpu", "--venue", "agent_poll", "Known gaps", "desktop-access-migration", "/var/lib/syncyard"} {
+	for _, want := range []string{"--needs-gpu", "--venue", "agent_poll", "Known gaps", "/var/lib/syncyard"} {
 		if !strings.Contains(helpText, want) {
 			t.Errorf("help omits %q", want)
 		}
@@ -536,7 +536,7 @@ func TestGatekeeperCandidatesCoverFleetPaths(t *testing.T) {
 		hows = append(hows, c.how)
 	}
 	joined := strings.Join(hows, " | ")
-	for _, want := range []string{"desktop-access-migration", "/var/lib/syncyard", "~/syncyard", "~/.syncyard"} {
+	for _, want := range []string{"/var/lib/syncyard", "~/syncyard", "~/.syncyard"} {
 		if !strings.Contains(joined, want) {
 			t.Errorf("candidates missing fleet path %q: %s", want, joined)
 		}

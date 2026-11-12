@@ -131,10 +131,8 @@ Known gaps (named, not silent):
 
 Gatekeeper lookup: $SYNCYARD_GK, then
 $SYNCYARD_HOME/gatekeeper/gk.py, then ~/syncyard, ~/.syncyard,
-~/workspace/desktop-access-migration/gatekeeper/gk.py (this
-fleet's VM gatekeeper),
-/var/lib/syncyard/gatekeeper/gatekeeper/gk.py (mini-server's
-governed install; the flat legacy path is tried after it),
+/var/lib/syncyard/gatekeeper/gatekeeper/gk.py (the system
+install; the flat legacy path is tried after it),
 beside this binary, or ./gatekeeper.
 Python: $SYNCYARD_PYTHON, else python3 / python / py on PATH.
 syncyard-cli: $SYNCYARD_CLI, then rust/target/{release,debug}

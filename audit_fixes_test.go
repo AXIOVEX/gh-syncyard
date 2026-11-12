@@ -26,10 +26,10 @@ func TestGatekeeperCandidatesIncludeMiniServerGovernedPath(t *testing.T) {
 		}
 	}
 	if gi < 0 {
-		t.Fatalf("candidates %v missing mini-server governed path %q", paths, governed)
+		t.Fatalf("candidates %v missing governed system-install path %q", paths, governed)
 	}
 	if li < 0 {
-		t.Fatalf("candidates %v missing legacy mini-server path %q (kept for transition)", paths, legacy)
+		t.Fatalf("candidates %v missing legacy system-install path %q (kept for transition)", paths, legacy)
 	}
 	if gi > li {
 		t.Fatalf("governed path must be tried before the legacy path: %v", paths)

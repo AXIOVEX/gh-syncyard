@@ -38,16 +38,13 @@ func gatekeeperCandidates() []candidate {
 	if home, err := os.UserHomeDir(); err == nil {
 		add(filepath.Join(home, "syncyard", "gatekeeper", "gk.py"), "~/syncyard/gatekeeper/gk.py")
 		add(filepath.Join(home, ".syncyard", "gatekeeper", "gk.py"), "~/.syncyard/gatekeeper/gk.py")
-		// This fleet: the VM-local Desktop Access gatekeeper.
-		add(filepath.Join(home, "workspace", "desktop-access-migration", "gatekeeper", "gk.py"),
-			"~/workspace/desktop-access-migration/gatekeeper/gk.py (fleet VM gatekeeper)")
 	}
-	// This fleet: the mini-server system install. The governed
-	// copy lives in the nested gatekeeper/gatekeeper layout
-	// (the checkout root holds no gk.py); the flat legacy path
-	// is kept after it for transition.
-	add("/var/lib/syncyard/gatekeeper/gatekeeper/gk.py", "/var/lib/syncyard/gatekeeper/gatekeeper/gk.py (mini-server install)")
-	add("/var/lib/syncyard/gatekeeper/gk.py", "/var/lib/syncyard/gatekeeper/gk.py (mini-server install, legacy layout)")
+	// The system install. The governed copy lives in the
+	// nested gatekeeper/gatekeeper layout (the checkout root
+	// holds no gk.py); the flat legacy path is kept after it
+	// for transition.
+	add("/var/lib/syncyard/gatekeeper/gatekeeper/gk.py", "/var/lib/syncyard/gatekeeper/gatekeeper/gk.py (system install)")
+	add("/var/lib/syncyard/gatekeeper/gk.py", "/var/lib/syncyard/gatekeeper/gk.py (system install, legacy layout)")
 	if exe, err := os.Executable(); err == nil {
 		dir := filepath.Dir(exe)
 		add(filepath.Join(dir, "gatekeeper", "gk.py"), "beside the extension binary")
@@ -146,10 +143,8 @@ or point the extension at an existing checkout:
   # or, for the gatekeeper file itself:
   export SYNCYARD_GK=/path/to/gatekeeper/gk.py
 
-Fleet locations already in the lookup: ~/syncyard, ~/.syncyard,
-~/workspace/desktop-access-migration/gatekeeper (this fleet's VM
-gatekeeper) and /var/lib/syncyard/gatekeeper/gatekeeper
-(mini-server's governed install).
+Locations already in the lookup: ~/syncyard, ~/.syncyard and
+/var/lib/syncyard/gatekeeper/gatekeeper (the system install).
 
 Then re-run:  gh syncyard doctor
 `)
