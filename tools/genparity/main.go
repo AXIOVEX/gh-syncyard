@@ -6,7 +6,7 @@
 // Usage:
 //
 //	go run ./tools/genparity \
-//	  --gk  /path/to/AXIOVEX/syncyard/gatekeeper/gk.py \
+//	  --gk  /path/to/electrohire/syncyard/gatekeeper/gk.py \
 //	  --cli /path/to/syncyard/rust/crates/syncyard-cli/src/lib.rs \
 //	  --out testdata [--check]
 //

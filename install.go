@@ -20,7 +20,7 @@ import (
 // `gh syncyard upgrade`.
 //
 // The verb fetches the versioned Syncyard release bundle
-// for the host OS/arch from AXIOVEX/syncyard releases,
+// for the host OS/arch from electrohire/syncyard releases,
 // verifies every component against the release SHA-256
 // manifest (MANIFEST.json, the real v0.4.0 layout) BEFORE
 // placing anything, and refuses — placing nothing — on any
@@ -35,7 +35,7 @@ import (
 // variable, so tests run entirely against a local httptest
 // server and temp dirs.
 
-const defaultReleaseBaseURL = "https://github.com/AXIOVEX/syncyard/releases/download"
+const defaultReleaseBaseURL = "https://github.com/electrohire/syncyard/releases/download"
 
 var (
 	installHTTPClient = &http.Client{Timeout: 60 * time.Second}

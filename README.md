@@ -3,12 +3,12 @@
 Run jobs on **your own machines** from the command you already live in:
 
 ```console
-$ gh extension install AXIOVEX/gh-syncyard
+$ gh extension install electrohire/gh-syncyard
 $ gh syncyard status
 $ gh syncyard submit --lane auto --needs-gpu 12000 --script check.ps1
 ```
 
-[Syncyard](https://github.com/AXIOVEX/syncyard) dispatches work to
+[Syncyard](https://github.com/electrohire/syncyard) dispatches work to
 self-hosted runner lanes on your Windows, WSL2, macOS, and Linux
 hosts, supervised by a local **gatekeeper**: a queued, budgeted,
 watchdogged door between "an agent wants this run" and your hardware.
@@ -41,7 +41,7 @@ The extension needs a local Syncyard checkout (that's where the
 gatekeeper lives):
 
 ```console
-$ git clone https://github.com/AXIOVEX/syncyard ~/syncyard
+$ git clone https://github.com/electrohire/syncyard ~/syncyard
 $ gh syncyard doctor
 ```
 
@@ -88,7 +88,7 @@ $ gh syncyard upgrade --version 0.5.0
 
 `install` / `upgrade` (spec 031 amendment) fetch the named
 Syncyard release bundle for this host's OS/arch from
-[AXIOVEX/syncyard releases](https://github.com/AXIOVEX/syncyard/releases),
+[electrohire/syncyard releases](https://github.com/electrohire/syncyard/releases),
 verify every component against the release SHA-256 manifest
 (`MANIFEST.json`) **before placing anything** (a mismatch
 refuses and places nothing), and place `syncyard-daemon`,
@@ -141,7 +141,7 @@ after an engine verb change with:
 
 ```console
 $ go run ./tools/genparity \
-    --gk  /path/to/AXIOVEX/syncyard/gatekeeper/gk.py \
+    --gk  /path/to/electrohire/syncyard/gatekeeper/gk.py \
     --cli /path/to/syncyard/rust/crates/syncyard-cli/src/lib.rs \
     --out testdata
 ```
@@ -149,7 +149,7 @@ $ go run ./tools/genparity \
 CI runs the same generator against pinned engine revisions
 and fails on drift. One allowance is documented in the CI
 job: the live fleet gatekeeper carries `artifact-delete`,
-which AXIOVEX/syncyard main does not have yet, so that
+which electrohire/syncyard main does not have yet, so that
 single line is excluded from the CI comparison until
 syncyard main gains the verb; `genparity --check` against
 the live gatekeeper remains the strict full comparison.
@@ -164,4 +164,4 @@ and the unix-only daemon socket in this build.
 
 Apache-2.0. Design: spec 010 FR-012 and spec 031 (extension
 refresh) in
-[AXIOVEX/syncyard](https://github.com/AXIOVEX/syncyard).
+[electrohire/syncyard](https://github.com/electrohire/syncyard).

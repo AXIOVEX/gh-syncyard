@@ -136,9 +136,9 @@ func printSetupHelp(w io.Writer) {
 	fmt.Fprintf(w, `gh-syncyard: no Syncyard gatekeeper found.
 
 The extension dispatches to the gatekeeper from a local
-AXIOVEX/syncyard install. To set it up:
+electrohire/syncyard install. To set it up:
 
-  git clone https://github.com/AXIOVEX/syncyard ~/syncyard
+  git clone https://github.com/electrohire/syncyard ~/syncyard
 
 or point the extension at an existing checkout:
 

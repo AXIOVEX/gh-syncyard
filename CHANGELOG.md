@@ -119,7 +119,7 @@ spec 038 UPD-01); 0.2.x/0.3.x were never released.
 ## 0.1.0 — 2026-10-31
 
 - First release: thin Go dispatcher forwarding `gh syncyard ...` to
-  the locally installed Syncyard gatekeeper (AXIOVEX/syncyard,
+  the locally installed Syncyard gatekeeper (electrohire/syncyard,
   spec 010 FR-012). Gatekeeper lookup via $SYNCYARD_GK /
   $SYNCYARD_HOME / ~/syncyard / ~/.syncyard / beside the binary /
   ./gatekeeper; Python via $SYNCYARD_PYTHON or PATH.

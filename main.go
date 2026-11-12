@@ -4,7 +4,7 @@
 // engines exist during the Rust migration (spec 038's one-move
 // cutover has not happened yet):
 //
-//   - the Python gatekeeper (gatekeeper/gk.py, AXIOVEX/syncyard)
+//   - the Python gatekeeper (gatekeeper/gk.py, electrohire/syncyard)
 //     is the live engine. Every verb it implements is forwarded to
 //     it verbatim, streaming stdin, stdout, stderr and the exit
 //     code unchanged — the 0.1.0 pattern, kept.

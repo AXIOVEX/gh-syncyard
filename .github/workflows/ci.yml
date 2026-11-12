@@ -29,7 +29,7 @@ jobs:
   # The Rust CLI surface is pinned to the v0.4.0 release
   # commit on the Rust branch, which is where the Rust
   # workspace lives, and is compared strictly. The Python
-  # surface is pinned to AXIOVEX/syncyard main with ONE
+  # surface is pinned to electrohire/syncyard main with ONE
   # documented allowance: the live fleet gatekeeper carries
   # the artifact-delete verb, which syncyard main does not
   # have yet (audit 2026-11-10; the fixture is extracted
@@ -45,12 +45,12 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/checkout@v4
         with:
-          repository: AXIOVEX/syncyard
+          repository: electrohire/syncyard
           ref: 787dbcba1d4b0277ec19631f65baf7eec56ae649
           path: .parity/python
       - uses: actions/checkout@v4
         with:
-          repository: AXIOVEX/syncyard
+          repository: electrohire/syncyard
           ref: ed1b07c8f4ade104036aee98ac4a67aa0ea75be7
           path: .parity/rust
       - uses: actions/setup-go@v5

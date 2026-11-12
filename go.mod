@@ -1,3 +1,3 @@
-module github.com/AXIOVEX/gh-syncyard
+module github.com/electrohire/gh-syncyard
 
 go 1.22
