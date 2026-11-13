@@ -110,7 +110,7 @@ func TestDocsCoverSubmitArgsAndNewerVerbs(t *testing.T) {
 		}
 	}
 	// The parity note for submit names the docker-transport
-	// arguments too (spec 031 FR-031-03).
+	// arguments too.
 	for _, r := range buildParity().Verbs {
 		if r.Verb == "submit" {
 			if !strings.Contains(r.Note, "--image") || !strings.Contains(r.Note, "--mounts") {

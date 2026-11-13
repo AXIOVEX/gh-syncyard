@@ -158,7 +158,7 @@ func TestUnknownVerbRefused(t *testing.T) {
 	}
 }
 
-// ---------- drift / parity tests (spec 031: proven, not by eye) ----------
+// ---------- drift / parity tests (proven, not by eye) ----------
 
 func readLines(t *testing.T, path string) []string {
 	t.Helper()
@@ -180,7 +180,7 @@ func TestParityPythonVerbsMatchGKPy(t *testing.T) {
 	// testdata/gk_verbs.txt is extracted mechanically from
 	// gk.py's argparse setup (add_parser names) in the live
 	// fleet gatekeeper. If gk.py gains or loses a verb, this
-	// fails until the extension is refreshed: the spec 031
+	// fails until the extension is refreshed: the
 	// parity check.
 	want := readLines(t, "testdata/gk_verbs.txt")
 	got := sortedKeys(pythonVerbs)
@@ -215,7 +215,7 @@ func loadSchema(t *testing.T) cliSchema {
 func TestParityCLISchema(t *testing.T) {
 	// testdata/cli_schema.json is captured from the built
 	// syncyard-cli's own `schema` verb (the generation source
-	// for this shim, spec 038 section 9).
+	// for this shim).
 	s := loadSchema(t)
 	if s.Version != buildParity().EngineVersion {
 		t.Errorf("schema version %q != parity engine version %q", s.Version, buildParity().EngineVersion)
@@ -266,7 +266,7 @@ func TestParityCLISchema(t *testing.T) {
 	}
 }
 
-func TestSocketVerbsAreSpec037Surface(t *testing.T) {
+func TestSocketVerbsSurface(t *testing.T) {
 	// The daemon's control surface (serve.rs): control_command /
 	// control_outcomes / kill_switch. kill_switch routes through
 	// the CLI's kill-switch verb; the two file/outcome verbs are
@@ -303,7 +303,7 @@ func TestPythonForwardVerbatim(t *testing.T) {
 	}
 }
 
-func TestSubmitSpec016RoutingArgsForwardVerbatim(t *testing.T) {
+func TestSubmitRoutingArgsForwardVerbatim(t *testing.T) {
 	cleanEnv(t)
 	_, gk := fakeGK(t)
 	calls := captureChildren(t, 0)

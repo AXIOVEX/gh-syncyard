@@ -140,7 +140,7 @@ func rustStateHome() string {
 }
 
 // forwardToRustCLI delegates a Rust-only verb to syncyard-cli,
-// always with an explicit --home (FR-038-11: no default exists).
+// always with an explicit --home (no default exists).
 func forwardToRustCLI(verb string, rest []string, stdout, stderr io.Writer) int {
 	home := rustStateHome()
 	if home == "" {
