@@ -14,7 +14,7 @@ import (
 	"time"
 )
 
-// ---------- fix 8: spec 031 install / upgrade ----------
+// ---------- fix 8: install / upgrade ----------
 
 var releasePayloads = map[string]string{
 	"syncyard-daemon": "#!/bin/sh\necho daemon\n",

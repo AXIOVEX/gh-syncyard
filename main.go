@@ -44,7 +44,7 @@
 // syncyard-cli beside this binary, then PATH.
 //
 // The Rust state home is always passed explicitly as --home (the
-// CLI has no compiled-in default by design, FR-038-11): it is
+// CLI has no compiled-in default by design): it is
 // $SYNCYARD_STATE_HOME when set, else the directory holding the
 // resolved gk.py. The daemon socket is <state home>/gk.sock.
 package main
